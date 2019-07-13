@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  
+  cassandra:
+    image: cassandra
+    container_name: cassandra
+    network_mode: bridge
+    volumes:
+        - /data/cassandra:/var/lib/cassandra
+  
+  sparkmaster:
+    build: ./spark_dockerfile
+    image: mloew/spark_image:2.4.3
+    container_name: sparkmaster
+    network_mode: host
+    depends_on:
+      - cassandra
+    environment:
+      - ROLE=master
+ 
+  sparkslave:
+    image: mloew/spark_image:2.4.3
+    network_mode: host
+    depends_on:
+      - cassandra
+      - sparkmaster
+    environment:
+      - ROLE=slave 
+      - MASTER_URL=spark://LVS-02:7077
+
+
