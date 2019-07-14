@@ -1,20 +1,22 @@
 # EDDN Spark Compose
-This is a local Apache Spark cluster with Apache Cassandra database, which can be built quickly and easily using Docker Compose. The focus is on the integration of Elite Dangerous (EDDN) data, which is loaded directly into Cassandra. This makes it possible to run Pyspark tests and analyses with Spark directly after initialization.
+This is a local Apache Spark cluster with Apache Cassandra database, which can be built quickly and easily using Docker Compose. The focus is on the integration of Elite Dangerous (EDDN) data, which is loaded directly into Cassandra. This makes it possible to run PySpark tests and analyses with Spark directly after initialization.
 
 # Table of Content
 [Installation](#Installation)
-- [Python 3](#Python%203)
-- [Docker](#Docker)
-- [Docker Compose](#Docker%20Compose)
+- [Python 3](##Python%203)
+- [Docker](##Docker)
+- [Docker Compose](##Docker%20Compose)
 
 [Usage](#Usage)
-- [Project sections](#Project%20sections)
-  1. [Load Data from eddb<span></span>.io](#Load%20Data%20from%20eddb<span></span>.io)
-  2. [Run Docker-Compose file](#Run%20Docker-Compose%20file)
-  3. [Copy Data to Cassandra](#Copy%20Data%20to%20Cassandra)
-  4. [Run pyspark skripts](#Run%20pyspark%20skripts)
-- [Run all in one](#Run%20all%20in%20one)
-- [Remove and cleane](#Remove%20and%20clean)
+- [Project sections](##Project%20sections)
+  1. [Load Data from eddb<span></span>.io](###Load%20Data%20from%20eddb<span></span>.io)
+  2. [Run Docker-Compose file](###Run%20Docker-Compose%20file)
+  3. [Copy Data to Cassandra](###Copy%20Data%20to%20Cassandra)
+  4. [Run PySpark skripts](###Run%20pyspark%20skripts)
+- [Run all in one](##Run%20all%20in%20one)
+- [Remove and cleane](##Remove%20and%20clean)
+
+[References](##References)
 
  # Installation
 To use the cluster, the installation of
@@ -174,8 +176,85 @@ So the installation is already done.
 # Usage
 The execution is devided in single shell scripts. The functionality and benefits are explained in the chapter project section. There is also a shell script which executes all steps together in the correct order. The project is designed for Linux systems, but can be ported with adaptations of the shell scripts for the respective operating system.
 
-## Project Section 
+## Project sections
 
 Following all steps are described that you need to run in the chapter order to make the project/cluster works.
 
 ### Load Data from eddb<span></span>.io
+The data that is used comes from the game Elite Dangerous (EDDN) and is provided by the API of the website eddb.io.<br>
+With the python script `EDDNClient.py` the data is read by the API and written in JSON format into a .log file (Logs_JSON_EDDN_yyyy-mm-dd).<br> 
+The number of downloaded datasets/rows is defined by the argument --number_of_datasets.<br>
+Afterwards the . log file is transformed with the script `transform_to_csv.py` into a CSV format to make it suitable for Cassandra.
+
+For the execution use the shell script `download_and_transform_data.sh` with the necessary argument:
+```sh
+$ bash download_and_transform_data.sh -d <Number of datasets that should be downloaded> 
+```
+or 
+```sh
+$ bash download_and_transform_data.sh --datasets <Number of datasets that should be downloaded>
+```
+
+### Run Docker-Compose file
+The cluster can be created after the database has been set up.
+To do this, use the shell script `run_docker_compose.sh`. The script expects an argument to specify the number of Spark nodes/slaves. Then Docker Compose is used to build the cluster with the scaled number of Spark nodes.
+```sh
+$ bash run_docker_compose.sh -n <number of nodes/workers that will be created> 
+```
+or 
+```sh
+$ bash run_docker_compose.sh --nodes <number of nodes/workers that will be created> 
+```
+
+### Copy Data to Cassandra
+After the cluster is initialized, the EDDN data can be loaded into the database. 
+Execute the script: 
+```sh
+$ bash load_data-into_cassandra.sh 
+```
+
+This script calls the Cassandra file `copy_data.cql` which creates the keyspace and the table and loads the data from the CSV file.
+
+ 
+### Run PySpark skripts
+The provided PySpark script `eddb_data.py` is just an example. It will select the whole table and write the result into a CSV file in the folder *./compose_cluster/export_data.*
+
+Use this shell script to run PySpark: 
+```sh
+$ bash exec_pyspark_scripts.sh 
+```
+In this script you can also insert your own PySpark scripts or replace the existing one to execute them.
+
+**Note**: A pandas function is used to create the CSV. However, this is only useful for small amounts of data, because it loads the data into the RAM before writing. As a result, the RAM runs full if the amount of data is too large. To avoid this you can comment out the following line in the PySpark script eddb_data.py:
+```python
+# df_data.toPandas().to_csv('/tmp/check_cass_data.csv', header=True, encoding='utf8')
+```
+
+### Run all in one
+To avoid that each step has to be executed separately, a shell script with two arguments can be used:
+```sh
+$ bash run_all.sh -d <Number of datasets that should be downloaded> -n <number of nodes/workers that will be created>
+```
+or 
+```sh
+$ bash run_all.sh --dataset <Number of datasets that should be downloaded> --nodes <number of nodes/workers that will be created>
+```
+This script executes all steps in the correct order.
+
+**Note**: During the first execution of the script it is possible that the data is not copied and the PySpark script is not executed correctly. This happens because of the initialization time of the Docker Container. If this problem occurs, the error can be fixed by executing the shell script again. Since it is recognized that the cluster already exists when the script is executed again, only the missing steps will be performed. But each time the cluster is executed, the amount of loaded datasets must be specified. Therefore, it is recommended to set this number to a low value when the cluster is executed again. After the cluster has built up, there will be no recurrent complications when running the script again.
+
+### Remove and clean
+To remove the cluster with all docker containers and the docker images, use the script:
+```sh
+$ bash remove_docker_container_images.sh 
+```
+To delete all created data files, run the script:
+```sh
+$ bash clean_folders_from_files.sh 
+```
+
+## References
+These are the references that were used for the creation of the readme.
+- https://docs.docker.com/install/linux/docker-ce
+- https://docs.docker.com/compose/install/
+- https://www.saintlad.com/install-python-3-on-mac/
