@@ -14,18 +14,16 @@ This is a local Apache Spark cluster with Apache Cassandra database, which can b
   3. [Copy Data to Cassandra](###Copy%20Data%20to%20Cassandra)
   4. [Run PySpark skripts](###Run%20pyspark%20skripts)
 - [Run all in one](##Run%20all%20in%20one)
-- [Remove and cleane](##Remove%20and%20clean)
+- [Remove and clean](##Remove%20and%20clean)
 
 [References](##References)
 
  # Installation
-To use the cluster, the installation of
-
+To use the cluster, it is required to install:
 1. Python 3
 2. Docker
 3. Docker Compose 
 
-is required. <br>
 Docker is needed for the individual components, each of them running in its own container. Docker Compose starts all containers together. And Python 3 is used to load the Elite Dangerous data.
 
 ## Python 3
@@ -64,9 +62,9 @@ Also it possible to install python with Anaconda or with configuration in power 
 
 ### MacOS
 
-Before installing python make sure that xcode and homebrew are installed on your computer.
+Before installing python make sure that Xcode and Homebrew are installed on your computer.
 
-Isn't that so, then run this in terminal to install xcode:
+Isn't that so, then run this in terminal to install Xcode:
 ```sh
 $ xcode-select –install 
 ```
