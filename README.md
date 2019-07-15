@@ -3,22 +3,22 @@ This is a local Apache Spark cluster with Apache Cassandra database, which can b
 
 # Table of Content
 [Installation](#Installation)
-- [Python 3](##Python%203)
+- [Python 3](##Python-3)
 - [Docker](##Docker)
-- [Docker Compose](##Docker%20Compose)
+- [Docker Compose](##Docker-Compose)
 
 [Usage](#Usage)
-- [Project sections](##Project%20sections)
-  1. [Load Data from eddb<span></span>.io](###Load%20Data%20from%20eddb<span></span>.io)
-  2. [Run Docker-Compose file](###Run%20Docker-Compose%20file)
-  3. [Copy Data to Cassandra](###Copy%20Data%20to%20Cassandra)
-  4. [Run PySpark skripts](###Run%20pyspark%20skripts)
-- [Run all in one](##Run%20all%20in%20one)
-- [Remove and clean](##Remove%20and%20clean)
+- [Project sections](##Project-sections)
+  1. [Load Data from eddb<span></span>.io](###Load-Data-from-eddb<span></span>.io)
+  2. [Run Docker-Compose file](###Run-Docker-Compose-file)
+  3. [Copy Data to Cassandra](###Copy-Data-to-Cassandra)
+  4. [Run PySpark skripts](###Run-pyspark-skripts)
+- [Run all in one](##Run-all-in-one)
+- [Remove and clean](##Remove-and-clean)
 
 [References](##References)
 
- # Installation
+# Installation
 To use the cluster, it is required to install:
 1. Python 3
 2. Docker
