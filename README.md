@@ -3,22 +3,22 @@ This is a local Apache Spark cluster with Apache Cassandra database, which can b
 
 # Table of Content
 [Installation](#Installation)
-- [Python 3](##Python%203)
+- [Python 3](##Python-3)
 - [Docker](##Docker)
-- [Docker Compose](##Docker%20Compose)
+- [Docker Compose](##Docker-Compose)
 
 [Usage](#Usage)
-- [Project sections](##Project%20sections)
-  1. [Load Data from eddb<span></span>.io](###Load%20Data%20from%20eddb<span></span>.io)
-  2. [Run Docker-Compose file](###Run%20Docker-Compose%20file)
-  3. [Copy Data to Cassandra](###Copy%20Data%20to%20Cassandra)
-  4. [Run PySpark skripts](###Run%20pyspark%20skripts)
-- [Run all in one](##Run%20all%20in%20one)
-- [Remove and clean](##Remove%20and%20clean)
+- [Project sections](##Project-sections)
+  1. [Load Data from eddb<span></span>.io](###Load-Data-from-eddb<span></span>.io)
+  2. [Run Docker-Compose file](###Run-Docker-Compose-file)
+  3. [Copy Data to Cassandra](###Copy-Data-to-Cassandra)
+  4. [Run PySpark skripts](###Run-pyspark-skripts)
+- [Run all in one](##Run-all-in-one)
+- [Remove and clean](##Remove-and-clean)
 
 [References](##References)
 
- # Installation
+# Installation
 To use the cluster, it is required to install:
 1. Python 3
 2. Docker
@@ -106,14 +106,48 @@ $ python3 get-pip.py
 
 ## Docker
 ### Linux
+For deatiled information take a look at the [Docker Documentation](https://docs.docker.com/install/linux/docker-ce/ubuntu/), the first Link in chapter References.
+
 #### Uninstall the old version
 Make sure that no outdated Docker version is installed:
 ```sh
 $ sudo apt-get remove docker docker-engine docker.io containerd runc 
 ```
+#### Set up the Repository
+Update the `apt` package index:
+```sh
+$ sudo apt-get update
+```
+Then install packages to allow `apt` to use a repository over HTTPS:
+```sh
+$ sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+```
 
-#### Then install the current version of Docker
-Update the apt package index:
+Now add Docker’s official GPG key:
+```sh
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+```
+
+Afterwards check if the key with the fingerprint 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88 was added.
+Use the last 8 characters of the fingerprint for searching.
+```sh
+$ sudo apt-key fingerprint 0EBFCD88
+```
+At the last use the following command to set up the stable repository.
+```sh
+$ sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+```
+
+#### Install the current version of Docker
+Update the `apt package index:
 ```sh
 $ sudo apt-get update 
 ```
@@ -125,7 +159,7 @@ $ sudo apt-get install docker-ce docker-ce-cli containerd.io
 
 ### Microsoft Windows 
 
-If you haven’t already downloaded the installer (Docker Desktop Installer.exe), you can get it from download.docker.com.<br>
+If you haven’t already downloaded the installer (Docker Desktop Installer.exe), you can get it from [download.docker.com](https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe).<br>
 1. Double-click Docker Desktop for Windows Installer.exe to run the installer. 
 
 2. Follow the install wizard to accept the license, authorize the installer, and proceed with the install. 
@@ -135,18 +169,18 @@ If you haven’t already downloaded the installer (Docker Desktop Installer.exe)
 
 ### MacOS 
 
-To install Docker Desktop for Mac download the Docker.dmg from [Docker Hub](https://hub.docker.com/editions/community/docker-ce-desktop-mac).<br>
+To install Docker Desktop for Mac download the *Docker.dmg* from [Docker Hub](https://hub.docker.com/editions/community/docker-ce-desktop-mac).<br>
 *It is required to sign up on docker hub to download docker for mac.*
 
-1. Double-click Docker.dmg to open the installer, then drag Moby the whale to the Applications folder.
+1. Double-click *Docker.dmg* to open the installer, then drag Moby the whale to the Applications folder.
 
-2. Double-click Docker.app in the Applications folder to start Docker.
+2. Double-click *Docker.app* in the Applications folder to start Docker.
 
 
 ## Docker Compose
 ### Linux
 
-To install docker compose with curl, run this command to download the current stable release of Docker Compose:
+To install docker compose with `curl`, run this command to download the current stable release of Docker Compose:
 ```sh
 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose 
 ```
@@ -156,7 +190,7 @@ Apply executable permissions to the binary:
 sudo chmod +x /usr/local/bin/docker-compose 
 ```
 
-Alternativly you can use pip to install docker compose: 
+Alternativly you can use `pip` to install docker compose: 
 ```sh
 sudo pip install docker-compose 
 ```
@@ -181,8 +215,8 @@ Following all steps are described that you need to run in the chapter order to m
 ### Load Data from eddb<span></span>.io
 The data that is used comes from the game Elite Dangerous (EDDN) and is provided by the API of the website eddb.io.<br>
 With the python script `EDDNClient.py` the data is read by the API and written in JSON format into a .log file (Logs_JSON_EDDN_yyyy-mm-dd).<br> 
-The number of downloaded datasets/rows is defined by the argument --number_of_datasets.<br>
-Afterwards the . log file is transformed with the script `transform_to_csv.py` into a CSV format to make it suitable for Cassandra.
+The number of downloaded datasets/rows is defined by the argument *--number_of_datasets*.<br>
+Afterwards the .log file is transformed with the script `transform_to_csv.py` into a CSV format to make it suitable for Cassandra.
 
 For the execution use the shell script `download_and_transform_data.sh` with the necessary argument:
 ```sh
@@ -223,7 +257,7 @@ $ bash exec_pyspark_scripts.sh
 ```
 In this script you can also insert your own PySpark scripts or replace the existing one to execute them.
 
-**Note**: A pandas function is used to create the CSV. However, this is only useful for small amounts of data, because it loads the data into the RAM before writing. As a result, the RAM runs full if the amount of data is too large. To avoid this you can comment out the following line in the PySpark script eddb_data.py:
+**Note**: A pandas function is used to create the CSV. However, this is only useful for small amounts of data, because it loads the data into the RAM before writing. As a result, the RAM runs full if the amount of data is too large. To avoid this you can comment out the following line in the PySpark script `eddb_data.py`:
 ```python
 # df_data.toPandas().to_csv('/tmp/check_cass_data.csv', header=True, encoding='utf8')
 ```
