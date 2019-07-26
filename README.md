@@ -215,7 +215,7 @@ Following all steps are described that you need to run in the chapter order to m
 ### Load Data from eddb<span></span>.io
 The data that is used comes from the game Elite Dangerous (EDDN) and is provided by the API of the website eddb.io.<br>
 With the python script `EDDNClient.py` the data is read by the API and written in JSON format into a .log file (Logs_JSON_EDDN_yyyy-mm-dd).<br> 
-The number of downloaded datasets/rows is defined by the argument *--number_of_datasets*.<br>
+The number of downloaded datasets/rows is defined by the argument *-d, --datasets*.<br>
 Afterwards the .log file is transformed with the script `transform_to_csv.py` into a CSV format to make it suitable for Cassandra.
 
 For the execution use the shell script `download_and_transform_data.sh` with the necessary argument:
@@ -224,7 +224,7 @@ $ bash download_and_transform_data.sh -d <Number of datasets that should be down
 ```
 or 
 ```sh
-$ bash download_and_transform_data.sh --datasets <Number of datasets that should be downloaded>
+$ bash download_and_transform_data.sh --datasets=<Number of datasets that should be downloaded>
 ```
 
 ### Run Docker-Compose file
@@ -235,14 +235,14 @@ $ bash run_docker_compose.sh -n <number of nodes/workers that will be created>
 ```
 or 
 ```sh
-$ bash run_docker_compose.sh --nodes <number of nodes/workers that will be created> 
+$ bash run_docker_compose.sh --nodes=<number of nodes/workers that will be created> 
 ```
 
 ### Copy Data to Cassandra
 After the cluster is initialized, the EDDN data can be loaded into the database. 
 Execute the script: 
 ```sh
-$ bash load_data-into_cassandra.sh 
+$ bash load_data_into_cassandra.sh 
 ```
 
 This script calls the Cassandra file `copy_data.cql` which creates the keyspace and the table and loads the data from the CSV file.
@@ -269,7 +269,7 @@ $ bash run_all.sh -d <Number of datasets that should be downloaded> -n <number o
 ```
 or 
 ```sh
-$ bash run_all.sh --dataset <Number of datasets that should be downloaded> --nodes <number of nodes/workers that will be created>
+$ bash run_all.sh --dataset=<Number of datasets that should be downloaded> --nodes=<number of nodes/workers that will be created>
 ```
 This script executes all steps in the correct order.
 
