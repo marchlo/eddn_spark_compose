@@ -147,7 +147,7 @@ $ sudo add-apt-repository \
 ```
 
 #### Install the current version of Docker
-Update the `apt package index:
+Update the `apt` package index:
 ```sh
 $ sudo apt-get update 
 ```
