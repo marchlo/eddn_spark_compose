@@ -30,13 +30,13 @@ Docker is needed for the individual components, each of them running in its own 
 It is recomanded to install the latest version of python 3.
 
 ### Linux
-Before installing the latest version, check if currently a python 3 installed version on your machine. <br>
+Before installing the latest version, check for a currently installed python 3 version. <br>
 To check this, run:
 
 ```sh
 $ python3 --version
 ```
-Is a version of python 3 installed you can upgrade this to latest version:
+If a version of python 3 is installed you can upgrade this to latest version:
 ```sh
 $ sudo apt-get upgrade python3 
 ```
@@ -57,14 +57,14 @@ $ sudo apt install python3-pip
 
 ### Windows
 Download the excecutable installer from https://www.python.org/downloads/windows/ .<br>
-After that execute the installer and following the instruction.<br>
-Also it possible to install python with Anaconda or with configuration in power shell.
+Afterwards execute the installer and following the instruction.<br>
+It also is possible to install python with Anaconda or with configuration in power shell.
 
 ### MacOS
 
 Before installing python make sure that Xcode and Homebrew are installed on your computer.
 
-Isn't that so, then run this in terminal to install Xcode:
+If that is not the case, then run this in the terminal to install Xcode:
 ```sh
 $ xcode-select –install 
 ```
@@ -78,7 +78,7 @@ Now check if a python version is already installed:
 $ python3 --version 
 ```
 
-Is a version installed you can upgrade this to latest version:
+Is a version installed you can upgrade this to the latest version:
 ```sh
 $ brew update 
 ```
@@ -106,7 +106,7 @@ $ python3 get-pip.py
 
 ## Docker
 ### Linux
-For deatiled information take a look at the [Docker Documentation](https://docs.docker.com/install/linux/docker-ce/ubuntu/), the first Link in chapter References.
+For detailed information take a look at the [Docker Documentation](https://docs.docker.com/install/linux/docker-ce/ubuntu/), the first Link in chapter References.
 
 #### Uninstall the old version
 Make sure that no outdated Docker version is installed:
@@ -138,7 +138,7 @@ Use the last 8 characters of the fingerprint for searching.
 ```sh
 $ sudo apt-key fingerprint 0EBFCD88
 ```
-At the last use the following command to set up the stable repository.
+At last use the following command to set up the stable repository.
 ```sh
 $ sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
@@ -162,7 +162,7 @@ $ sudo apt-get install docker-ce docker-ce-cli containerd.io
 If you haven’t already downloaded the installer (Docker Desktop Installer.exe), you can get it from [download.docker.com](https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe).<br>
 1. Double-click Docker Desktop for Windows Installer.exe to run the installer. 
 
-2. Follow the install wizard to accept the license, authorize the installer, and proceed with the install. 
+2. Follow the install wizard to accept the license, authorize the installer, and proceed with the installation. 
 
 3. Click Finish on the setup dialog to complete and launch Docker.
 
@@ -202,18 +202,18 @@ $ docker-compose –version
  
 ### Windows and MacOS 
 
-The desktop version of docker include docker compose.<br> 
+The desktop version of docker includes docker compose.<br> 
 So the installation is already done.
 
 # Usage
-The execution is devided in single shell scripts. The functionality and benefits are explained in the chapter project section. There is also a shell script which executes all steps together in the correct order. The project is designed for Linux systems, but can be ported with adaptations of the shell scripts for the respective operating system.
+The execution is divided in single shell scripts. The functionality and benefits are explained in the chapter project section. There is also a shell script with which all steps can executed in the correct order. The project is designed for Linux systems, but can be ported with adaptations of the shell scripts for the respective operating system.
 
 ## Project sections
 
 Following all steps are described that you need to run in the chapter order to make the project/cluster works.
 
 ### Load Data from eddb<span></span>.io
-The data that is used comes from the game Elite Dangerous (EDDN) and is provided by the API of the website eddb.io.<br>
+The used data comes from the game Elite Dangerous (EDDN) and is provided by the API of the website eddb.io.<br>
 With the python script `EDDNClient.py` the data is read by the API and written in JSON format into a .log file (Logs_JSON_EDDN_yyyy-mm-dd).<br> 
 The number of downloaded datasets/rows is defined by the argument *-d, --datasets*.<br>
 Afterwards the .log file is transformed with the script `transform_to_csv.py` into a CSV format to make it suitable for Cassandra.
